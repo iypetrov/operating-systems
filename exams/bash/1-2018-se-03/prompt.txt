@@ -1,0 +1,19 @@
+Зад. 8 2018-SE-03 При подреждане в нарастващ ред на числовите потребителски идентификатори (U I D ) на
+акаунтите, дефинирани в системата, 201-ят акаунт е от групата, запазена за акаунти от специалност
+СИ.
+Изведете списък с имената (име и фамилия) и home директориите на всички акаунти от специалност
+СИ, подреден по факултетен номер.
+За справка:
+s 6 1 9 8 8 : x : 1 2 1 9 : 5 0 4 : S t o i a n G e n c h e v , S I , 2 , 5 : / h o m e / S I / s 6 1 9 8 8 : / b i n / b a s h
+s 8 1 4 3 0 : x : 1 2 3 4 : 5 0 3 : I o r d a n P e t k o v , K N , k 2 , g 7 : / h o m e / K N / s 8 1 4 3 0 : / b i n / b a s h
+s 6 1 8 0 7 : x : 1 2 4 8 : 5 0 4 : E l i c a V e n c h o v a : / h o m e / S I / s 6 1 8 0 7 : / b i n / b a s h
+s 6 2 0 0 9 : x : 1 2 5 4 : 5 0 4 : D e n i t s a D o b r e v a , 2 , 6 : / h o m e / S I / s 6 2 0 0 9 : / b i n / b a s h
+s 6 1 7 5 6 : x : 1 2 5 8 : 5 0 4 : K a t r i n K a r t u l e v a , S I , 4 , 1 : / h o m e / S I / s 6 1 7 5 6 : / b i n / b a s h
+s 8 5 5 2 8 7 : x : 1 1 9 5 : 5 0 4 : V a s k a K i c h u k o v a , S I , 2 , 5 : / h o m e / S I / s 8 5 5 2 8 7 : / b i n / b a s h
+Примерен изход:
+K a t r i n K a r t u l e v a : / h o m e / S I / s 6 1 7 5 6
+E l i c a V e n c h o v a : / h o m e / S I / s 6 1 8 0 7
+S t o i a n G e n c h e v : / h o m e / S I / s 6 1 9 8 8
+D e n i t s a D o b r e v a : / h o m e / S I / s 6 2 0 0 9
+
+V a s k a K i c h u k o v a : / h o m e / S I / s 8 5 5 2 8
