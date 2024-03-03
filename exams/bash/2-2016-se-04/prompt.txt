@@ -1,0 +1,29 @@
+2016-SE-04 Файловете във вашата home директория съдържат информация за музикални албуми и
+имат специфична структура. Началото на всеки ред е годината на издаване на албума, а непосредствено,
+след началото на всеки ред следва името на изпълителя на песента. Имената на файловете се състоят
+от една дума, която съвпада с името на изпълнителя.
+
+Примерно съдържание на файл с име ”Bonnie”:
+
+2 0 0 5 г . B o n n i e - " G o d W a s i n t h e W a t e r " ( R a n d a l l B r a m b l e t t , D a v i s C a u s e y ) – 5 : 1 7
+2 0 0 5 г . B o n n i e - " L o v e o n O n e C o n d i t i o n " ( J o n C l e a r y ) – 3 : 4 3
+2 0 0 5 г . B o n n i e - " S o C l o s e " ( T o n y A r a t a , G e o r g e M a r i n e l l i , P e t e W a s n e r ) – 3 : 2 2
+2 0 0 5 г . B o n n i e - " T r i n k e t s " ( E m o r y J o s e p h ) – 5 : 0 2
+2 0 0 5 г . B o n n i e - " C r o o k e d C r o w n " ( D a v i d B a t t e a u , M a i a S h a r p ) – 3 : 4 9
+2 0 0 5 г . B o n n i e - " U n n e c e s s a r i l y M e r c e n a r y " ( J o n C l e a r y ) – 3 : 5 1
+2 0 0 5 г . B o n n i e - " I W i l l N o t B e B r o k e n " - " D e e p W a t e r " ( J o h n C a p e k , M a r c J o r d a n ) – 3 : 5 8
+Да се напише shell скрипт приемащ два параметъра, които са имена на файлове от вашата home
+директория. Скриптът сравнява, кой от двата файла има повече на брой редове, съдържащи неговото
+име (на файла). За файлът победител изпълнете следните действия:
+• извлечете съдържанието му, без годината на издаване на албума и без името на изпълнителя
+
+• сортирайте лексикографски извлеченото съдържание и го запишете във файл с име ’изпълнител.songs’
+Примерен изходен файл (с име Bonnie.songs):
+" C r o o k e d C r o w n " ( D a v i d B a t t e a u , M a i a S h a r p ) – 3 : 4 9
+" G o d W a s i n t h e W a t e r " ( R a n d a l l B r a m b l e t t , D a v i s C a u s e y ) – 5 : 1 7
+" I W i l l N o t B e B r o k e n " - " D e e p W a t e r " ( J o h n C a p e k , M a r c J o r d a n ) – 3 : 5 8
+
+" L o v e o n O n e C o n d i t i o n " ( J o n C l e a r y ) – 3 : 4 3
+" S o C l o s e " ( T o n y A r a t a , G e o r g e M a r i n e l l i , P e t e W a s n e r ) – 3 : 2 2
+" T r i n k e t s " ( E m o r y J o s e p h ) – 5 : 0 2
+" U n n e c e s s a r i l y M e r c e n a r y " ( J o n C l e a r y ) – 3 : 51
