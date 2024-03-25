@@ -4,7 +4,6 @@ data="$(ps -e -o uid,pid,rss \
     | sed 's/^[[:space:]]*//g' \
     | sed 's/ \+/ /g' \
     | tail -n +2)"
-#| grep -v -E '^0 ' \
 result="$(while read uid; do
     echo "$data" | awk -v UID="$uid" '{if ($1 == UID) printf "%s\n", $0 }' \
         | awk 'BEGIN {cnt=0} {cnt=cnt+$3} END {printf "%s %s\n",$1,cnt}'
