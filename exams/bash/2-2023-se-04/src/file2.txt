@@ -1,0 +1,1 @@
+/mnt/c/Users/ipetrov/stuff/personal/projects/operating-systems/exams/bash/2-2023-se-04/src/file1.txt

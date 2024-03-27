@@ -1,0 +1,29 @@
+#!/bin/bash
+
+snapshot () {
+    cmds=$(ps -e -o cmd \
+        | tail -n +2 \
+        | rev \
+        | cut -d ' ' -f2- \
+        | rev)
+            
+    while read -r cmd; do 
+        rss=$(ps -e -o cmd,rss \
+            | tail -n +2 \
+            | sed 's/ \+/ /g' \
+            #| grep -F "$cmd" \
+            | rev \
+            | cut -d ' ' -f1 \
+            | rev \
+            | tr ' ' '\n' \
+            | awk '{ sum += $1 } END { print sum }')
+
+        if [[ -n "$rss" ]]; then
+            echo "$cmd $rss"
+        fi
+    done < <(echo "$cmds")
+}
+
+sshot=$(snapshot)
+echo "$sshot"
+
