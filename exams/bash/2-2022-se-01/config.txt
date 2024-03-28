@@ -1,0 +1,2 @@
+GLANS disabled 
+LID enabled

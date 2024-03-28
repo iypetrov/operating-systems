@@ -1,0 +1,7 @@
+Device	State	Status	Sysfs
+GLANS	4*	disabled	pci:0000:00:1f.6
+XHCS	3*	enabled	pci:0000:00:14.0
+XDCIS	4*	disabled	
+LIDS	4*	enabled	platform:PNP0C0D:00
+HDASS	4*	disabled	pci:0000:00:1f.3
+RP01S	4*	enabled	pci:0000:00:1c.0

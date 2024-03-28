@@ -1,0 +1,8 @@
+unitname,unitsymbol,measure
+second,s,time
+metre,m,length
+kilogram,kg,mass
+ampere,A,electriccurrent
+kelvin,K,thermodynamictemperature
+mole,mol,amountofsubstance
+candela,cd,luminousintensity
