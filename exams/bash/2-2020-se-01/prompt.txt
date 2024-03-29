@@ -1,0 +1,45 @@
+Зад. 38 2020-SE-01 Напишете shell скрипт, който получава два задължителни позиционни параметъра - име
+на файл (b a r . c s v ) и име на директория. Директорията може да съдържа текстови файлове с имена
+от вида f o o b a r . l o g , всеки от които има съдържание от следния вид:
+Пример 1 (l o z - g w . l o g ):
+L i c e n s e d f e a t u r e s f o r t h i s p l a t f o r m :
+M a x i m u m P h y s i c a l I n t e r f a c e s : 8
+
+V L A N s : 2 0
+I n s i d e H o s t s : U n l i m i t e d
+F a i l o v e r : A c t i v e / S t a n d b y
+V P N - 3 D E S - A E S : E n a b l e d
+
+* T o t a l V P N P e e r s : 2 5
+V L A N T r u n k P o r t s : 8
+T h i s p l a t f o r m h a s a n A S A 5 5 0 5 S e c u r i t y P l u s l i c e n s e .
+S e r i a l N u m b e r : J M X 0 0 0 0 0 0 0 0
+R u n n i n g A c t i v a t i o n K e y : 0 e 2 6 8 e 0 c
+Пример 2 (b o r d e r - l o z e n e t s . l o g ):
+L i c e n s e d f e a t u r e s f o r t h i s p l a t f o r m :
+
+M a x i m u m P h y s i c a l I n t e r f a c e s : 4
+V L A N s : 1 6
+I n s i d e H o s t s : U n l i m i t e d
+F a i l o v e r : A c t i v e / A c t i v e
+V P N - 3 D E S - A E S : D i s a b l e d
+* T o t a l V P N P e e r s : 1 6
+V L A N T r u n k P o r t s : 4
+
+T h i s p l a t f o r m h a s a P I X 5 3 5 l i c e n s e .
+S e r i a l N u m b e r : P I X 5 3 5 0 0 0 7
+
+R u n n i n g A c t i v a t i o n K e y : 0 x d 1 1 b 3 d 4 8
+Имената на лог файловете (l o z - g w , b o r d e r - l o z e n e t s ) определят даден hostname, а съдържанието им
+дава детайли за определени параметри на съответният хост.
+
+Файлът b a r . c s v , който трябва да се генерира от вашия скрипт, е т.н. CSV (comma separated values)
+файл, тоест текстови файл - таблица, на който полетата на всеки ред са разделени със запетая. Първият
+ред се ползва за определяне на имената на колоните.
+Скриптът трябва да създава файла b a r . c s v на база на log файловете в директорията. Генерираният
+CSV файл от директория, която съдържа само l o z - g w . l o g и b o r d e r - l o z e n e t s . l o g би изглеждал така:
+h o s t n a m e , p h y , v l a n s , h o s t s , f a i l o v e r , V P N - 3 D E S - A E S , p e e r s , V L A N T r u n k P o r t s , l i c e n s e , S N , k e y
+l o z - g w , 8 , 2 0 , U n l i m i t e d , A c t i v e / S t a n d b y , E n a b l e d , 2 5 , 8 , A S A 5 5 0 5 S e c u r i t y P l u s , J M X 0 0 0 0 0 0 0 0 , 0 e 2 6 8 e 0 c
+b o r d e r - l o z e n e t s , 4 , 1 6 , U n l i m i t e d , A c t i v e / A c t i v e , D i s a b l e d , 1 6 , 4 , P I X 5 3 5 , P I X 5 3 5 0 0 0 7 , 0 x d 1 1 b 3 d 4 8
+Полетата в генерирания от скрипта CSV файл не трябва да съдържат излишни trailing/leading интервали.
+За улеснение, приемете, че всички whitespace символи във входните файлове са символа “интервал”

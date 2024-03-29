@@ -1,0 +1,9 @@
+# wow characters
+
+# human = mage     # cool # edited at Fri Mar 29 22:21:53 EET 2024 by ipetrov
+human = rougue # added at Fri Mar 29 22:21:53 EET 2024 by ipetrov
+
+dwarf=   hunter
+
+orc = warrior
+elf = rougue # added at Fri Mar 29 21:50:32 EET 2024 by ipetrov
