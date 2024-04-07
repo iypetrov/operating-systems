@@ -1,0 +1,80 @@
+Зад. 42 2020-SE-05 Напишете shell скрипт, който приема 3 позиционни аргумента – две имена на файлове и
+име на директория. Примерно извикване:
+$ . / f o o . s h f o o . p w d c o n f i g . c f g c f g d i r /
+В директорията c f g d i r / и нейните под-директории може да има файлове с имена завършващи на
+. c f g . За да са валидни, тези файлове трябва да съдържат редове само в следните формати (редовете
+започващи с # са коментари):
+# i n t e r n a l l a b o r a t o r y
+
+{ n o - p r o d u c t i o n } ;
+{ v o l a t i l e } ;
+# m e o w c o n f i g s
+{ r u n - a l l ; } ;
+Във файла f o o . p w d има описани потребителски имена (username) и MD5 хеш суми на паролите им,
+с по един запис на ред, в следният формат:
+u s e r n a m e : p a s s w o r d _ h a s h
+Също така, разполагате с команда p w g e n , която генерира и извежда на S T D O U T случайни пароли, и
+знаете, че поддържа следните два аргумента:
+
+$ p w g e n [ p a s s w o r d _ l e n g t h ] [ n u m b e r _ o f _ p a s s w o r d s ]
+Вашият скрипт трябва да валидира cfg файловете в директорията, и за тези, които не са валидни, да
+извежда на S T D O U T името на файла и номерирани редовете, които имат проблем, в следния формат:
+E r r o r i n f i l e n a m e . c f g :
+L i n e 1 : X X X X
+L i n e 3 7 : Y Y Y Y
+където XXXX и YYYY е съдържанието на съответния ред.
+За валидните файлове, скриптът трябва да:
+
+• генерира c o n f i g . c f g като обединение на съдържанието им;
+• името на файла, без частта . c f g дефинира потребителско име. Ако във файла с паролите не
+съществува запис за този потребител, то такъв да се добави и на стандартния изход да се изведе
+потребителското име и паролата (поне 16 символа) разделени с един интервал.
+# international laboratory
+{ no-production };
+
+{ volatile };
+
+# meow configs
+
+{ run-all; };
+# international laboratory
+{ no-production };
+
+{ volatile };
+
+# meow configs
+
+{ run-all; };
+# international laboratory
+{ no-production };
+
+{ volatile };
+
+# meow configs
+
+{ run-all; };
+# international laboratory
+{ no-production };
+
+{ volatile };
+
+# meow configs
+
+{ run-all; };
+# international laboratory
+{ no-production };
+
+{ volatile };
+
+# meow configs
+
+{ run-all; };
+# international laboratory
+{ no-production };
+
+{ volatile };
+
+# meow configs
+
+{ run-all; };
+input:e6cb403417681f64
