@@ -1,0 +1,14 @@
+martArrayP822 in Slot 1
+  Array J
+    physical drive 2E:1:19
+      Current Temperature (C): 29
+
+    physical drive 2E:1:20
+      Current Temperature (C): 28
+
+  Unassigned
+    physical drive 2E:1:21
+      Current Temperature (C): 30
+
+    physical drive 2E:1:22
+      Current Temperature (C): 29
