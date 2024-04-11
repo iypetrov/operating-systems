@@ -1,6 +1,14 @@
 #!/bin/bash
 
-while read line; do
-    cat "./var/logs/my-logs/$line" | grep -c error
-done< <(find ./var/logs/my-logs -type f -exec basename {} \; | awk '/[a-zA-Z0-9_]+_[0-9]+\.log$/{printf "%s\n", $0}') | awk 'BEGIN{ cnt=0 } {cnt+=$0} END{ print cnt }'
+SRC="var/logs/my-logs"
 
+while read file; do
+  cat "${file}" | tr ' ' '\n'
+done< <(find "$SRC" -type f \
+  | rev \
+  | cut -d '/' -f1 \
+  | rev \
+  | grep -E '^[a-zA-Z0-9_]+_[0-9]+\.log$' \
+  | awk -v PREFIX="${SRC}" '{ printf "%s/%s\n", PREFIX, $0 }') \
+  | grep -i -E 'error' \
+  | wc -l
