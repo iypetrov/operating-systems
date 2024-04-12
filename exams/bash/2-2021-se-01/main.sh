@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# use du for solution 
+
 get_megabytes_files() {
     ADR="$1"
 
