@@ -46,8 +46,8 @@ int main(void) {
 #include <sys/stat.h>
 
 int main(void) {
-     struct stat info;
-     const char *file = "text.txt";
+    struct stat info;
+    const char *file = "text.txt";
 
     if (stat(file, &info) == -1) {
         err(1, "can not stat file");
