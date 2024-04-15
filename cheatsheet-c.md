@@ -64,6 +64,8 @@ int main(void) {
         warn("file is empty");
         return 99;
     }
+
+    return 0;
 }
 ```
 
@@ -123,3 +125,100 @@ int main(void) {
     return 0;
 }
 ```
+
+# File Descriptors
+
+- O_RDONLY `#include <fcntl.h>` opens fd for reading
+- O_WRONLY `#include <fcntl.h>` opens fd for writing
+- O_RDWR `#include <fcntl.h>` opens fd for reading & writing
+- O_CREAT `#include <fcntl.h>` creates file if it doesn't exist (only case when you should provide file permissions with `open`)
+- O_TRUNC `#include <fcntl.h>` truncs the file if it exists before opening it
+- O_APPEND `#include <fcntl.h>` the starting position is at the end of file if it exists
+
+### Reading
+
+```c
+#include <stdio.h>
+#include <err.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+int main(void) {
+    const char* file = "text.txt";
+    int fd = open(file, O_RDONLY);
+
+    if (fd < 0) {
+        err(1, "failed to open a fd");
+        return 99;
+    }
+
+    char buf[10];
+    int offset;
+    while((offset = read(fd, buf, sizeof(buf))) > 0) {
+        printf("%s", buf);
+    }
+
+    if (offset < 0) {
+        err(1, "failed to read the file");
+        return 99;
+    }
+
+    if (close(fd) < 0) {
+        err(1, "failed to close a fd %d", fd);
+        return 99;
+    }
+
+    return 0;
+}
+```
+
+### Writing
+
+```c
+#include <stdio.h>
+#include <err.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
+
+int main(void) {
+    const char* file = "text.txt";
+    int fd = open(
+        file,
+        O_WRONLY|O_CREAT|O_APPEND,
+        0644
+    );
+
+    if (fd < 0) {
+        err(1, "failed to open a fd");
+        return 99;
+    }
+
+    const char* msg = "Hello World!\n";
+    int offset = write(fd, msg, strlen(msg));
+
+    if (offset < 0) {
+        err(1, "failed to write in the file");
+        return 99;
+    }
+
+    if (close(fd) < 0) {
+        err(1, "failed to close a fd %d", fd);
+        return 99;
+    }
+
+    return 0;
+}
+```
+
+### lseek
+
+`lseek` allows to jump on different offset in file
+
+- off_t lseek(int fd, off_t offset, int whence); `#include <unistd.h>`
+
+The whence options are:
+
+- SEEK_SET - absolute movement
+- SEEK_CUR - relative movement based on the current position
+- SEEK_END - relative movement at the end of file

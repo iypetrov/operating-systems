@@ -1,25 +1,34 @@
 #include <stdio.h>
-#include <fcntl.h>
 #include <err.h>
-#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
 
 int main(void) {
-     struct stat info;
-     const char *file = "text.txt";
+    const char* file = "text.txt";
+    int fd = open(
+        file,
+        O_WRONLY|O_CREAT|O_APPEND,
+        0644
+    );
 
-    if (stat(file, &info) == -1) {
-        err(1, "can not stat file");
+    if (fd < 0) {
+        err(1, "failed to open a fd");
         return 99;
     }
 
-    int result = open(file, O_RDONLY);
-    if (result < 0) {
-        err(1, "could not open file");
+    const char* msg = "Hello World!\n";
+    int offset = write(fd, msg, strlen(msg));
+
+    if (offset < 0) {
+        err(1, "failed to write in the file");
         return 99;
     }
 
-    if (info.st_size == 0) {
-        warn("file is empty");
+    if (close(fd) < 0) {
+        err(1, "failed to close a fd %d", fd);
         return 99;
     }
+
+    return 0;
 }
