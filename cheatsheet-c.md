@@ -8,7 +8,6 @@
 
 ### Print
 
-- int printf(const char \*format, ...); `#include <stdio.h>`
 - int dprintf(int fd, const char \*format, ...); `#include <stdio.h>`
 - int sprintf(char *str, const char *format, ...); `#include <stdio.h>`
 
@@ -19,22 +18,22 @@
 int main(void) {
     const char* foo = "foo";
 
-    // use printf for logging
-    printf("foo -> %s\n", foo);
-
     // use dprintf for logging to fd
     dprintf(STDOUT_FILENO, "foo -> %s\n", foo);
 
     // use sprintf for writing in buffer
     char buf[1024];
     sprintf(buf, "%s", foo);
-    printf("foo -> %s\n", buf);
+    dprintf(1, "foo -> %s\n", buf);
 
     return 0;
 }
 ```
 
 ### Error & Warning
+
+`err`/`warn` are for errors from system calls
+`errx`/`warnx` are for errors from BL
 
 - void err(int eval, const char \*fmt, ...); `#include <err.h>`
 - void warn(const char \*fmt, ...); `#include <err.h>`
@@ -111,16 +110,16 @@ int main(void) {
         return 99;
     }
 
-    printf("id of device containing file -> %ld\n", info.st_dev);
-    printf("inode number -> %ld\n", info.st_ino);
-    printf("file type and mode -> %d\n", info.st_mode);
-    printf("number of hard links -> %ld\n", info.st_nlink);
-    printf("user id of owner -> %d\n", info.st_uid);
-    printf("group id of owner -> %d\n", info.st_gid);
-    printf("device id (if special file) -> %ld\n", info.st_rdev);
-    printf("total size, bytes -> %ld\n", info.st_size);
-    printf("block size for filesystem i/o -> %ld\n", info.st_blksize);
-    printf("number of 512B blocks allocated -> %ld\n", info.st_blocks);
+    dprintf("id of device containing file -> %ld\n", info.st_dev);
+    dprintf("inode number -> %ld\n", info.st_ino);
+    dprintf("file type and mode -> %d\n", info.st_mode);
+    dprintf("number of hard links -> %ld\n", info.st_nlink);
+    dprintf("user id of owner -> %d\n", info.st_uid);
+    dprintf("group id of owner -> %d\n", info.st_gid);
+    dprintf("device id (if special file) -> %ld\n", info.st_rdev);
+    dprintf("total size, bytes -> %ld\n", info.st_size);
+    dprintf("block size for filesystem i/o -> %ld\n", info.st_blksize);
+    dprintf("number of 512B blocks allocated -> %ld\n", info.st_blocks);
 
     return 0;
 }
@@ -155,7 +154,7 @@ int main(void) {
     char buf[10];
     int offset;
     while((offset = read(fd, buf, sizeof(buf))) > 0) {
-        printf("%s", buf);
+        dprintf(1, "%s", buf);
     }
 
     if (offset < 0) {
