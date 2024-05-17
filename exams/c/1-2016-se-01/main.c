@@ -13,9 +13,7 @@ void quicksort(char* arr, off_t start, off_t end);
 
 off_t get_size_file(int fd) {
   struct stat info;
-  if (fstat(fd, &info) < 0) {
-    err(1, "failed to stat");
-  }
+  if (fstat(fd, &info) == -1) err(1, "failed to stat");
   return info.st_size;
 }
 
@@ -51,18 +49,13 @@ void quicksort(char* arr, off_t start, off_t end) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc != 2) {
-      errx(1, "provide 1 arg");
-    }
+    if (argc != 2) errx(1, "provide 1 arg");
 
     int src = open(argv[1], O_RDONLY);
-    if (src < 0) {
-      err(1, "failed to open a file");
-    }
+    if (src == -1) err(1, "failed to open a file");
 
     off_t len = get_size_file(src);
     char arr[len];
-
     char buf;
     ssize_t offset;
     off_t cnt = 0;
@@ -70,23 +63,15 @@ int main(int argc, char* argv[]) {
       arr[cnt] = buf;
       cnt++;
     }
-    if (offset < 0) {
-      err(1, "failed to read");
-    }
-
+    if (offset == -1) err(1, "failed to read");
     close(src);
 
     quicksort(arr, 0, len - 1);
 
     int dst = open(argv[1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
-    if (dst < 0) {
-      err(1, "failed to open a file");
-    }
-
+    if (dst == -1) err(1, "failed to open a file");
     for (off_t i = 0; i < len; i++) {
-      if(write(dst, &arr[i], sizeof(char)) < 0) {
-        err(1, "failed to write");
-      }
+      if(write(dst, &arr[i], sizeof(char)) == -1) err(1, "failed to write");
     }
     close(dst);
 

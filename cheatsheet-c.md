@@ -221,3 +221,25 @@ The whence options are:
 - SEEK_SET - absolute movement
 - SEEK_CUR - relative movement based on the current position
 - SEEK_END - relative movement at the end of file
+
+### binary
+
+- when you want to read number bit by bit
+```c
+uint16_t num = 233;
+for (int i = 0; i < 16; i++) {
+    int bit = (num >> i) & 1;
+}
+```
+
+- when you want to change the i-th bit of a number, without affecting other
+```c
+uint16_t num = 233;
+int i = 5;
+
+// set i-th bit to 1
+uint32_t result1 |= 1 << i;
+
+// set i-th bit to 0
+uint32_t result2 &= ~(1 << i);
+```

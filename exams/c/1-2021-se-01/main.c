@@ -1,70 +1,66 @@
-#include <stdio.h>
-#include <err.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <err.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <stdint.h>
+#include <stdio.h>
 
-uint16_t pow(uint8_t base, uint8_t power) {
-  uint16_t res = 1;
+off_t get_file_size(int fd);
 
-  if (power == 0) {
-    return 1; 
-  }
-
-  for (uint8_t i = 0; i < power; i++) {
-    res *= base;
-  }
-  return res;
-}
-
-uint8_t mod(uint8_t a, uint8_t b) {
-  if (a > b) {
-    return a - b;
-  }
-  
-  if (a < b) {
-    return b - a;
-  }
-
-  return 0;
+off_t get_file_size(int fd) {
+  struct stat info;
+  if (fstat(fd, &info) == -1) err(1, "failed to fstat");
+  return info.st_size;
 }
 
 int main(int argc, char* argv[]) {
-  if (argc != 3) {
-    errx(1, "provide 2 args");
-  }
+  if (argc != 3) errx(1, "provide 2 args");
 
-  int src = open(argv[1], O_RDONLY);
-  if (src < 0) {
-    err(1, "failed to open");
-  }
+  int in = open(argv[1], O_RDONLY);
+  if (in == -1) err(1, "failed to open"); 
+  int out = open(argv[2], O_WRONLY | O_TRUNC | O_CREAT, 0644);
+  if (out == -1) err(1, "failed to open"); 
 
-  int dst = open(argv[2], O_WRONLY | O_TRUNC | O_CREAT, 0644);
-  if (dst < 0) {
-    err(1, "failed to open");
-  }
+  off_t in_size = get_file_size(in);
+  uint8_t buf[in_size];
+  if(read(in, &buf, in_size) == -1) err(1, "failed to read"); 
 
-  uint8_t buf;
-  uint16_t res;
-  ssize_t offset;
-  while ((offset = read(src, &buf, sizeof(uint8_t))) > 0) {
-    res = 0;
-    for (int i = 7; i >= 0; i--) {
-      uint8_t bit = (buf >> i) & 1; 
-      res <<= 2;
-      res |= (bit ? 2 : 1);
+  off_t counter = 0;
+  for (int i = 0; i < in_size; i++) {
+    uint8_t result1 = 0;
+    uint8_t result2 = 0;
+    for (int j = 0; j < 4; j++) {
+      if (counter == in_size * 8) break;
+
+      int bit = (buf[i] >> j) & 1;
+      if (bit) { 
+        result1 |= 1 << (2 * j + 1);
+      } else {
+        result1 |= 1 << (2 * j);
+      }
+
+      counter++;
     }
-    
-    if (write(dst, &res, sizeof(uint16_t)) < 0) {
-      err(1, "failed to write");
+    for (int j = 4; j < 8; j++) {
+      if (counter == in_size * 8) break;
+
+      int bit = (buf[i] >> j) & 1;
+      if (bit)  {
+        result2 |= 1 << (2 * (j - 4) + 1);
+      } else {
+        result2 |= 1 << (2 * (j - 4));
+      }
+
+      counter++;
     }
-  }
-  if (offset < 0) {
-    err(1, "failed to read");
+
+    if (write(out, &result2, sizeof(uint8_t)) == -1) err(1, "failed to write"); 
+    if (write(out, &result1, sizeof(uint8_t)) == -1) err(1, "failed to write"); 
   }
 
-  close(src);
+  close(in);
+  close(out);
 
   return 0;
 }
-
