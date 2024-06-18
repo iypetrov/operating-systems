@@ -31,7 +31,7 @@ work_res worker(char* cmd) {
   close(pfd[1]);
   work_res res;
   res.fd = pfd[0];
-  res.pid = pid; 
+  res.pid = pid;
   return res;
 }
 
@@ -58,14 +58,13 @@ void listen(work_res wr, work_res arr[], int len) {
     while ((rs = read(wr.fd, &buf, sizeof(char))) > 0) {
       dprintf(1, "%c", buf);
       if (buf == '\n') {
-        word[cnt] = '\0';
         if (!strcmp("foo!", word)) {
           for (int i = 0; i < len; i++) {
             if (arr[i].pid != wr.pid) {
               close(arr[i].fd);
               if (kill(arr[i].pid, SIGTERM) == -1) err(1, "failed kill");
             }
-          } 
+          }
           exit(0);
         } else {
           cnt = 0;
@@ -86,11 +85,11 @@ int main(int argc, char* argv[]) {
   work_res arr[argc - 1];
   for (int i = 0; i < argc - 1; i++){
     arr[i] = worker(argv[i + 1]);
-  } 
+  }
 
   for (int i = 0; i < argc - 1; i++){
     listen(arr[i], arr, argc - 1);
-  } 
+  }
 
   for (int i = 0; i < argc - 1; i++) {
     wait_ps();
@@ -98,4 +97,3 @@ int main(int argc, char* argv[]) {
 
   return 0;
 }
-

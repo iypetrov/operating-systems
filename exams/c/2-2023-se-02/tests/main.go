@@ -21,7 +21,7 @@ func main() {
 	stop := make(chan struct{})
 
 	go func() {
-		time.Sleep(time.Duration(1000000 * time.Second))
+		time.Sleep(time.Duration(100 * time.Second))
 		close(stop)
 	}()
 
@@ -31,6 +31,7 @@ func main() {
 			return
 		default:
 			fmt.Println(sentences[rand.IntN(len(sentences))])
+			time.Sleep(time.Second)
 		}
 	}
 }

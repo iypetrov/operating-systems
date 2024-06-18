@@ -1,92 +1,91 @@
-#include <sys/wait.h>
-#include <fcntl.h>
 #include <stdio.h>
-#include <string.h>
 #include <err.h>
-#include <sys/types.h>
+#include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
-void gen_hash(char filename[]);
+void worker(char* file);
+void wait_ps(void);
 
-void gen_hash(char filename[]) {
-  int m_pfd[2];
-  if (pipe(m_pfd) == -1) err(1, "failed to pipe");
-
-  pid_t m_pid = fork();
-  if (m_pid == -1) err(1, "failed to fork");
-
-  if (m_pid == 0) {
-    close(m_pfd[0]);
-    dup2(m_pfd[1], 1);
-    close(m_pfd[1]);
-    execlp("md5sum", "md5sum", filename, (char*)NULL);
-    err(1, "failed to md5sum");
+void worker(char* file) {
+  int pfd[2];
+  if (pipe(pfd) == -1) err(1, "failed pipe");
+  pid_t pid = fork();
+  if (pid == -1) err(1, "failed fork");
+  if (pid == 0) {
+    close(pfd[0]);
+    dup2(pfd[1], 1);
+    close(pfd[1]);
+    execlp("md5sum", "md5sum", file, (char*)NULL);
+    err(1, "failed exec");
   }
-  close(m_pfd[1]);
+  close(pfd[1]);
+  
+  strcat(file, ".hash");
+  if (file == (char*)NULL) err(1, "failed strcat"); 
 
-  char* hashfilename = strcat(filename, ".hash");
-  int fd = open(hashfilename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-  if (fd == -1) err(1, "failed to open");
+  char buf[4096];
+  if (read(pfd[0], &buf, 4096 * sizeof(char)) == -1) err(1, "failed read");
+  close(pfd[0]);
 
-  ssize_t rs;
-  char buf;
-  while ((rs = read(m_pfd[0], &buf, sizeof(char))) > 0) {
-    if (write(fd, &buf, sizeof(char)) == -1) err(1, "failed to write");
-  }
-  if (rs == -1) err(1, "failed to read");
-
+  int fd = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+  if (fd == -1) err(1, "failed open"); 
+  if (write(fd, &buf, strlen(buf)) == -1) err(1, "failed write");
   close(fd);
 }
 
+void wait_ps(void) {
+  int stat;
+  if (wait(&stat) == -1) err(1, "failed wait");
+  if (WIFEXITED(stat)) {
+    if (WEXITSTATUS(stat) != 0) {
+      warnx("ps ended with status %d", WEXITSTATUS(stat));
+    }
+  } else {
+    warnx("ps killed");
+  }
+}
+
 int main(int argc, char* argv[]) {
-  if (argc != 2) errx(1, "provide 1 arg");
+  if (argc != 2) errx(1, "provide 1 arg");  
 
-  int f_pfd[2];
-  if (pipe(f_pfd) == -1) err(1 , "failed to pipe");
-
-  pid_t f_pid = fork();
-  if (f_pid == -1) err(1, "failed to fork");
-  if (f_pid == 0) {
-    close(f_pfd[0]);
-    dup2(f_pfd[1], 1);
-    close(f_pfd[1]);
+  int pfd[2];
+  if (pipe(pfd) == -1) err(1, "failed pipe");
+  pid_t pid = fork();
+  if (pid == -1) err(1, "failed fork");
+  if (pid == 0) {
+    close(pfd[0]);
+    dup2(pfd[1], 1);
+    close(pfd[1]);
     execlp("find", "find", argv[1], "-type", "f", "-not", "-name", "*.hash", "-print0", (char*)NULL);
-    err(1, "failed to find");
+    err(1, "failed exec");
   }
-  close(f_pfd[1]);
-  
-  ssize_t rs;
-  int cnt = 0;
-  char filename[4096];
-  char buf;
-  int worker_cnt = 0;
-  while ((rs = read(f_pfd[0], &buf, sizeof(char))) > 0) {
-    if (buf != '\0' ) {
-      filename[cnt] = buf;
-      cnt++;
-    } else {
-      gen_hash(filename);
-      for (int i = 0; i < 4096; i++) {
-        filename[i] = '\0';
-      }
-      cnt = 0;
-      worker_cnt++;
-    }
-  }
-  if (rs == -1) err(1, "failed to read");
+  close(pfd[1]);
+  wait_ps();
 
-  for (int i = 0; i < worker_cnt + 1; i++) {
-    int status;
-    if (wait(&status) == -1) err(1, "failed to wait");
-    if (WIFEXITED(status)) {
-      if (WEXITSTATUS(status) != 0) {
-        warnx("ps ended with status %d", WEXITSTATUS(status));
+  ssize_t rs;
+  char buf;
+  int cnt = 0;
+  int file_cnt = 0;
+  char file[4096];
+  while ((rs = read(pfd[0], &buf, sizeof(char))) > 0) {
+    if (buf == '\0') {
+      cnt++;
+      file_cnt = 0;
+      worker(file);
+      for (int i = 0; i < 4096; i++) {
+        file[i] = '\0';
       }
     } else {
-      warnx("ps was killed");
+      file[file_cnt] = buf;
+      file_cnt++;
     }
+  }
+  for (int i = 0; i < cnt; i++) {
+    wait_ps();
   }
 
   return 0;
 }
-
